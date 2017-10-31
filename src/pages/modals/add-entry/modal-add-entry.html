@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-navbar>
+    <ion-buttons start>
+      <button ion-button (click)="dismiss()">Close</button>
+    </ion-buttons>
+    <ion-title>Ajouter une entrée</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <form #addEntryForm="ngForm" (ngSubmit)="dismiss(true)" novalidate>
+    <ion-list>
+      <ion-item>
+        <ion-label color="primary">Cocher si revenu</ion-label>
+        <ion-toggle name="isIncome" [(ngModel)]="newEntry.income"></ion-toggle>
+      </ion-item>
+      <ion-item>
+        <ion-label color="primary">Date de l'entrée</ion-label>
+        <ion-datetime name="date" displayFormat="DD MMMM YYYY" [(ngModel)]="date"></ion-datetime>
+      </ion-item>
+      <ion-item>
+        <ion-label color="primary">Libelle</ion-label>
+        <ion-input name="libelle" placeholder="Entrer un libelle" autocomplete="true" [(ngModel)]="newEntry.libelle" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label color="primary">Montant</ion-label>
+        <ion-input name="montant" type="number" placeholder="Entrer un nombre" min="0" step="10" [(ngModel)]="newEntry.value" required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label color="primary">Catégorie</ion-label>
+        <ion-select [(ngModel)]="newEntry.category" name="category" cancelText="annuler" required>
+          <ion-option *ngFor="let category of categories" [value]="category.id">{{category.name}}</ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+
+    <button ion-button type="submit" [disabled]="!addEntryForm.form.valid" full>Valider</button>
+  </form>
+</ion-content>

@@ -1,0 +1,58 @@
+<!-- HEADER -->
+<ion-header (swipeleft)="nextMonth();" (swiperight)="previousMonth();">
+  <ion-toolbar>
+    <ion-buttons left>
+      <button ion-button icon-only (tap)="previousMonth();">
+        <ion-icon name="arrow-dropleft-circle"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-buttons right>
+      <button ion-button icon-only (tap)="nextMonth();">
+        <ion-icon name="arrow-dropright-circle"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title (tap)="resetMonth();" tappable>{{displayDateString}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content padding>
+
+  <!-- Balance des depenses et revenus -->
+  <ion-list *ngIf="balance.income || balance.outcome">
+    <ion-item>Revenus
+      <span item-end>{{balance.income}}</span>
+    </ion-item>
+    <ion-item>Dépenses
+      <span item-end>- {{balance.outcome}}</span>
+    </ion-item>
+    <ion-item>Total
+      <span item-end>{{balance.remainder}}</span>
+    </ion-item>
+  </ion-list>
+
+  <ion-list *ngIf="!balance.income && !balance.outcome">
+    <ion-item>
+      Aucune données à afficher
+    </ion-item>
+  </ion-list>
+
+
+  <!-- Liste des depenses et revenus -->
+  <ion-list no-lines>
+    <ion-item [ngClass]="{nodate: samePreviousDate(i)}" *ngFor="let entry of entries; let i = index" (swipeleft)="delEntry(entry.id)"
+      (swiperight)="delEntry(entry.id)" (press)="editEntry(entry)">
+      <ion-badge *ngIf="!samePreviousDate(i)" item-start>{{entry.date | date:"dd"}}</ion-badge>
+      <ion-icon name="{{categories[entry.category].cssSelector}}" margin-right></ion-icon>
+      {{entry.libelle}}
+      <span [ngClass]="{outcome: !entry.income}" item-end>
+        <span *ngIf="!entry.income">-</span> {{entry.value}}
+      </span>
+      </ion-item>
+  </ion-list>
+
+
+  <!-- Bouton d'ajout d'entree -->
+  <ion-fab bottom center>
+    <button ion-fab mini (click)="addEntry()">+</button>
+  </ion-fab>
+</ion-content>
